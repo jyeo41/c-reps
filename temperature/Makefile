@@ -2,9 +2,9 @@
 
 CFLAGS = -g -Wall
 
-all: temp.c
-	gcc $(CFLAGS) -o temp temp.c
+all: fahr.c
+	gcc $(CFLAGS) -o fahr fahr.c
 
 clean:
-	rm temp
+	rm fahr
 
