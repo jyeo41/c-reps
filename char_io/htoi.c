@@ -1,7 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #define	YES	1
 #define	NO	0
+
+// program to convert hexadecimal string to integer value
 
 int htoi(char s[]);
 
@@ -12,7 +15,7 @@ int main()
 	// convert it to its integer value
 	// print the integer value
 
-	char hex[] = "0x000F8307";
+	char hex[] = "0xF8307";
 	int c = 0, hexvalue = 0;
 	hexvalue = htoi(hex);
 
@@ -22,7 +25,8 @@ int main()
 		printf("%c", hex[c]);
 		++c;
 	}
-	printf("\n%-12s%d", "Integer Value: ", hexvalue);
+	printf("\n%-15s%d", "Integer Value: ", hexvalue); // testing self implement function
+	printf("\n%-15s%ld", "Stdlib Value: ", strtol(hex, NULL, 0)); // testing against stdlib accuracy
 	printf("\n");
 }
 
@@ -43,7 +47,7 @@ int htoi(char s[])
 			++i;
 		}
 	}
-	
+	 // testing self implement function
 	validhex = YES;	// assumes its a valid hex string to start
 	returnval = 0;
 	for ( ; validhex == YES; ++i) // as long as its a valid hex string iterate through it
