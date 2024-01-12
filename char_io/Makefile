@@ -2,7 +2,7 @@
 
 CFLAGS = -g -Wall
 
-all: program1 program2 program3
+all: program1 program2 program3 program4
 
 program1: char.c
 	gcc $(CFLAGS) -o char char.c
@@ -13,5 +13,8 @@ program2: count.c
 program3: digits.c
 	gcc $(CFLAGS) -o digits digits.c
 
+program4: htoi.c
+	gcc $(CFLAGS) -o htoi htoi.c
+
 clean:
-	rm char count digits
+	rm char count digits htoi
