@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define	YES	1
 #define	NO	0
@@ -7,6 +8,7 @@
 // program to convert hexadecimal string to integer value
 
 int htoi(char s[]);
+void validinput(char Buffer[], int bufferlength, char* hexstring);
 
 int main()
 {
@@ -15,18 +17,19 @@ int main()
 	// convert it to its integer value
 	// print the integer value
 
-	char hex[] = "0xF8307";
+	char Buffer[12] = {0}; // max length of hexstring + 1
+	char hexstring[11] = ""; // max length of hexstring is 10 for optional 0x + 8 digits, + 1 for null terminator
 	int c = 0, hexvalue = 0;
-	hexvalue = htoi(hex);
 
+	validinput(Buffer, 12, hexstring);
+	hexvalue = htoi(hexstring);
 	printf("\n%-12s", "Hexadecimal String: ");
-	while (hex[c] != '\0')
+	while (hexstring[c] != '\0')
 	{
-		printf("%c", hex[c]);
+		printf("%c", hexstring[c]);
 		++c;
 	}
 	printf("\n%-15s%d", "Integer Value: ", hexvalue); // testing self implement function
-	printf("\n%-15s%ld", "Stdlib Value: ", strtol(hex, NULL, 0)); // testing against stdlib accuracy
 	printf("\n");
 }
 
@@ -76,4 +79,62 @@ int htoi(char s[])
 		}
 	}
 	return returnval;
+}
+
+void validinput(char Buffer[], int bufferlength, char* hexstring)
+{
+	printf("Please enter a valid hex string of no more than 8 bytes\n");
+	printf("The '0x' prefix is optional and inputs are case insensitive\n");
+
+	int validhex = NO; // variable to test the length of the input hexstring to see if len <= 8
+	while (validhex == NO)
+	{
+		fgets(Buffer, bufferlength, stdin); // reading user input into buffer stream
+
+		// if input begins with 0x or 0X prefix
+		if (Buffer[0] == '0' && (Buffer[1] == 'x' || Buffer[1] == 'X'))
+		{
+			// checking if \n character was successfully read into the subarray
+			// bufferlength - 2 because - 1 would be the guaranteed NULL terminator
+			// \n means the length of the hexstring is valid
+			for (int i = 0; i <= bufferlength - 2; i++)
+			{
+				if (Buffer[i] == '\n')
+				{
+					validhex = YES;
+					break;
+				}
+			}
+		}
+		// same logic but without the leading prefix
+		// checking bufferlength - 4 because we need to account for the offset
+		// from the lack of prefix
+		else
+		{
+			for (int i = 0; i <= bufferlength - 4; i++)
+			{
+				if (Buffer[i] == '\n')
+				{
+					validhex = YES;
+					break;
+				}
+			}
+		}
+		if (validhex == NO)
+		{
+			int ch;
+			// used for clearing the input buffer if the input hexstring was too big
+			// otherwise the fgets() reads the stored \n in the next call automatically
+			// skipping the user input thinking it received one
+			while ((ch = getchar()) != '\n' && ch != EOF)
+			{
+			}
+			printf("The hexstring was too long, please try again.\n");
+			printf("Enter a valid hexstring of max 8 bytes with optional prefix '0x' or '0X'\n\n");
+		}
+
+	}
+
+	sscanf(Buffer, "%s", hexstring);
+	
 }
