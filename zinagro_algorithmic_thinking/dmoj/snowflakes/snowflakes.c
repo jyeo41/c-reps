@@ -1,3 +1,7 @@
+// Implementing the given code by Daniel Zingaro in his book Algorithmic Thinking
+// making sure to understand the design and implementation and confirming the code 
+// compiles and runs in gcc
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -18,7 +22,7 @@ int snowflake_hashcode(int snowflake[]);
 
 int main(void)
 {
-	static snowflake_node *snowflakes[SIZE] = {NULL}; // array of pointers where each element is a linked list of snowflakes
+	static snowflake_node *snowflakes[SIZE] = {NULL}; // hashtable, array of snowflake pointers where each bucket is a LL
 	snowflake_node *snow;
 	int n, i, j, snowflake_code;
 
@@ -35,7 +39,6 @@ int main(void)
 		for (j = 0; j < 6; j++)
 		{
 			scanf("%d", &snow->snowflake[j]);
-			//printf("snowflake created\n");
 		}
 		snowflake_code = snowflake_hashcode(snow->snowflake);
 		snow->next = snowflakes[snowflake_code]; // inserting new snowflake to beginning of the list
@@ -52,10 +55,10 @@ void identify_identical(snowflake_node *snowflakes[])
 {
 	snowflake_node *node1, *node2;
 	int i;
-	for (i = 0; i < SIZE; i++)
+	for (i = 0; i < SIZE; i++) // iterating through the hash table
 	{
 		node1 = snowflakes[i];
-		while (node1 != NULL)
+		while (node1 != NULL) // double while loop to check twin snowflake pairs in a given hashtable bucket
 		{
 			node2 = node1->next;
 
@@ -77,7 +80,7 @@ void identify_identical(snowflake_node *snowflakes[])
 int are_identical(int snow1[], int snow2[])
 {
 	int start;
-	for (start = 0; start < 6; start++)
+	for (start = 0; start < 6; start++) // iterates through snow2 to find the first matching arm of the snowflake
 	{
 		if (identical_right(snow1, snow2, start))
 		{
@@ -96,7 +99,7 @@ int identical_right(int snow1[], int snow2[], int start)
 {
 	int offset, snow2_index;
 
-	for (offset = 0; offset < 6; offset++)
+	for (offset = 0; offset < 6; offset++) // once initial matching arm is found with start, use offsets to compare if twin snowflakes
 	{
 		snow2_index = start + offset;
 		if (snow2_index >= 6)
@@ -117,7 +120,7 @@ int identical_left(int snow1[], int snow2[], int start)
 
 	for (offset = 0; offset < 6; offset++)
 	{
-		snow2_index = start - offset;
+		snow2_index = start - offset; // start - offset ORDER MATTERS otherwise offset - start will give wrong comparison
 		if (snow2_index < 0)
 		{
 			snow2_index += 6;
@@ -137,7 +140,7 @@ int snowflake_hashcode(int snowflake[])
 	{
 		code += snowflake[i];
 	}
-	code = code % SIZE;
+	code = code % SIZE; // mod operation to put in correct buckets, otherwise it'll overflow for big snowflake arm integers
 	return code;
 }
 
