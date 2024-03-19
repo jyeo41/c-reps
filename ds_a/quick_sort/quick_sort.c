@@ -8,13 +8,13 @@ void swap_pointers(int *a, int *b);
 
 int main()
 {
-	int array[] = {5, 9, 1, 2, 6, 3};
+	int array[] = {7, 2, 1, 6, 8, 5, 3, 4};
 	int length = sizeof(array)/sizeof(array[0]);
 	int i;
 
 	quick_sort(array, 0, length - 1);
 
-	for (i = 0; i < 6; i++)
+	for (i = 0; i < 8; i++)
 	{
 		printf("%d ", array[i]);
 	}
@@ -53,7 +53,7 @@ int partition(int array[], int start, int end)
 		}
 	}
 
-	swap_pointers(&array[p_index], &array[end]);
+	swap(array, p_index, end);
 
 	return p_index;
 }
